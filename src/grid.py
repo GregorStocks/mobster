@@ -22,8 +22,7 @@ class Grid:
     def draw(self, screen):
         screen.blit(self.background, (0,0))
         for guy in self.guys:
-            screen.blit(guy.image, (guy.x * self.col_width,
-                                    guy.y * self.row_height))
+            guy.draw(screen, (guy.x * self.col_width, guy.y * self.row_height))
 
     def add(self, guy):
         self.guys.append(guy)

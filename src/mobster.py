@@ -4,6 +4,7 @@ import sys, pygame
 from pygame.locals import *
 from grid import Grid
 from guy import Guy
+from entity import Entity
 
 if __name__ == "__main__":
     pygame.init()
@@ -33,7 +34,7 @@ if __name__ == "__main__":
                 elif event.key == K_RETURN:
                     # shoot a bullet!
                     # this is a bad way to do it
-                    bullet = Guy('bullet', guy.x + 1, guy.y)
+                    bullet = Entity('bullet', guy.x + 1, guy.y)
                     grid.add(bullet)
                     for x in xrange(guy.weapon.range):
                         grid.draw(screen)

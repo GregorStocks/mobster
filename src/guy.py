@@ -1,10 +1,18 @@
+#!/usr/bin/python
+
 from weapon import Weapon
-from sprites import load_png
+from entity import Entity
+from pygame.font import Font
+import pygame
 
-class Guy:
+class Guy (Entity):
     def __init__(self, filename, x, y):
-        self.x = x
-        self.y = y
+        Entity.__init__(self, filename, x, y)
+        self.health = 100
         self.weapon = Weapon(5)
-        self.image, _ = load_png(filename)
+        self.font = Font(None, 12)
 
+    def draw(self, screen, pos):
+        Entity.draw(self, screen, pos)
+        text = self.font.render('%s%%' % self.health, True, pygame.Color(0,0,0))
+        screen.blit(text, pos)
