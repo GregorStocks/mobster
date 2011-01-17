@@ -18,8 +18,8 @@ class Grid:
         self.background = pygame.Surface((self.col_width * cols,
                                           self.row_height * rows))
 
-        for x in range(self.cols):
-            for y in range(self.rows):
+        for x in xrange(self.cols):
+            for y in xrange(self.rows):
                 rect.topleft = (x*rect.width, y*rect.height)
                 self.background.blit(picture, rect)
 
@@ -32,11 +32,19 @@ class Grid:
     def add(self, guy):
         self.guys.append(guy)
 
+    def remove(self, guy):
+        self.guys.remove(guy)
+
 class Guy:
     def __init__(self, filename, x, y):
         self.x = x
         self.y = y
+        self.weapon = Weapon(5)
         self.image, _ = load_png(filename)
+
+class Weapon:
+    def __init__(self, range):
+        self.range = range
 
 if __name__ == "__main__":
     pygame.init()
@@ -63,6 +71,17 @@ if __name__ == "__main__":
                     guy.x -= 1
                 elif event.key == K_RIGHT:
                     guy.x += 1
+                elif event.key == K_RETURN:
+                    # shoot a bullet!
+                    # this is a bad way to do it
+                    bullet = Guy('bullet', guy.x + 1, guy.y)
+                    grid.add(bullet)
+                    for x in xrange(guy.weapon.range):
+                        grid.draw(screen)
+                        pygame.display.flip()
+                        bullet.x += 1
+                        pygame.time.wait(100)
+                    grid.remove(bullet)
                     
         grid.draw(screen)
         pygame.display.flip()
