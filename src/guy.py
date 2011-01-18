@@ -5,7 +5,7 @@ from entity import Entity
 import pygame
 
 class Guy (Entity):
-    def __init__(self, filename, x, y):
-        Entity.__init__(self, filename, x, y)
+    def __init__(self, filename):
+        Entity.__init__(self, filename)
         self.health = 100
         self.weapon = Weapon(5)

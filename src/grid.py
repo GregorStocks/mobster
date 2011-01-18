@@ -5,7 +5,7 @@ class Grid:
     def __init__(self, background_filename, cols, rows):
         '''Creates a grid, with size set by the background's size.'''
         picture, rect = load_png(background_filename)
-        self.guys = []
+        self.entities = {}
         self.col_width = rect.width
         self.row_height = rect.height
         self.cols = cols
@@ -21,12 +21,24 @@ class Grid:
 
     def draw(self, screen):
         screen.blit(self.background, (0,0))
-        for guy in self.guys:
-            guy.draw(screen, (guy.x * self.col_width, guy.y * self.row_height))
+        for e, (x, y) in self.entities.items():
+            e.draw(screen, (x * self.col_width, y * self.row_height))
 
-    def add(self, guy):
-        self.guys.append(guy)
+    def add(self, e, pos):
+        self.entities[e] = pos
 
-    def remove(self, guy):
-        self.guys.remove(guy)
+    def remove(self, e):
+        del self.entities[e]
+
+    def move(self, e, delta):
+        x, y = self.entities[e]
+        dx, dy = delta
+        self.entities[e] = (x + dx, y + dy)
+
+    def collisions(self, entity):
+        '''returns everything in the grid with the same (x, y) as entity'''
+        x, y = self.entities[entity]
+        for e, (ex, ey) in self.entities.items():
+            if x == ex and y == ey:
+                yield e
 
