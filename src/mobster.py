@@ -5,6 +5,7 @@ from pygame.locals import *
 from grid import Grid
 from guy import Guy
 from entity import Entity
+from ui import UI
 
 if __name__ == "__main__":
     pygame.init()
@@ -16,6 +17,7 @@ if __name__ == "__main__":
     enemy.image = pygame.transform.flip(enemy.image, True, False)
 
     grid = Grid('grass', 10, 6)
+    ui = UI(grid)
     grid.add(guy)
     grid.add(enemy)
     while 1:
@@ -44,4 +46,5 @@ if __name__ == "__main__":
                     grid.remove(bullet)
                     
         grid.draw(screen)
+        ui.draw(screen, guy)
         pygame.display.flip()
