@@ -41,9 +41,16 @@ class Grid:
         return True
 
     def collisions(self, entity):
-        '''returns everything in the grid with the same (x, y) as entity'''
-        x, y = self.entities[entity]
+        '''returns everything else in the grid with the same (x, y) as entity'''
+        for e in self.at(self.entities[entity]):
+            if e != entity:
+                yield e
+
+    def at(self, pos):
+        '''returns all entities at (x, y)'''
+        (x, y) = pos
         for e, (ex, ey) in self.entities.items():
             if x == ex and y == ey:
                 yield e
+
 

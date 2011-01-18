@@ -8,16 +8,18 @@ class UI:
         '''a UI right below the grid'''
         self.pos = (0, grid.rows * grid.row_height)
         self.font = Font(None, 12)
-        self.background = pygame.Surface((grid.col_width * grid.cols, 50))
+        self.background = pygame.Surface((grid.col_width * grid.cols, 100))
         self.background.fill(Color(255,255,255))
 
-    def draw(self, screen, guy, enemy):
+    def draw(self, screen, guys, enemies):
         screen.blit(self.background, self.pos)
 
-        text = self.font.render('cool guy: %s%%' % guy.health, True, pygame.Color(0,0,0))
-        screen.blit(text, self.pos)
-
-        text = self.font.render('bad guy: %s%%' % enemy.health, True, pygame.Color(0,0,0))
         x, y = self.pos
-        screen.blit(text, (x + 200, y))
+        for (x, desc, list) in [(x, 'cool guy', guys), (x + 200, 'enemy', enemies)]:
+            guynum = 0
+            for guy in list:
+                str = '%s #%s: %s%%' % (desc, guynum + 1, guy.health)
+                text = self.font.render(str, True, pygame.Color(0,0,0))
+                screen.blit(text, (x, y + guynum * 13))
+                guynum += 1
 
