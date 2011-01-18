@@ -2,7 +2,7 @@
 
 from sprites import load_png
 
-class Entity:
+class Entity(object):
     def __init__(self, filename):
         self.image, _ = load_png(filename)
 

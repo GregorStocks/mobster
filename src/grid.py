@@ -1,7 +1,7 @@
 import pygame
 from sprites import load_png
 
-class Grid:
+class Grid(object):
     def __init__(self, background_filename, cols, rows):
         '''Creates a grid, with size set by the background's size.'''
         picture, rect = load_png(background_filename)

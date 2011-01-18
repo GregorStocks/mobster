@@ -3,7 +3,7 @@ from sprites import load_png
 from pygame.font import Font
 from pygame.color import Color
 
-class UI:
+class UI(object):
     def __init__(self, grid):
         '''a UI right below the grid'''
         self.pos = (0, grid.rows * grid.row_height)

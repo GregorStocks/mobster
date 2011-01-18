@@ -6,11 +6,29 @@ from grid import Grid
 from guy import Guy
 from entity import Entity
 from ui import UI
+from action import *
 
 def update_screen(grid, ui, screen, guys, enemies):
     grid.draw(screen)
     ui.draw(screen, guys, enemies)
     pygame.display.flip()
+
+def handle_key(grid, ui, screen, key, guys, curguy):
+    guy = guys[curguy]
+    action = None
+    if key == K_UP or key == K_DOWN or key == K_LEFT or key == K_RIGHT:
+        action = Move(guy, key)
+    elif event.key == K_RETURN:
+        action = Shoot(grid.entities[guy], guy.weapon.range)
+    if action != None:
+        if not action.execute(grid, screen, ui, guys, enemies):
+            return curguy
+    return (curguy + 1) % len(guys)
+
+def move_enemies(grid, ui, screen, guys, enemies):
+    for enemy in enemies:
+        action = Shoot(grid.entities[enemy], enemy.weapon.range)
+        action.execute(grid, screen, ui, guys, enemies)
 
 if __name__ == "__main__":
     pygame.init()
@@ -40,43 +58,8 @@ if __name__ == "__main__":
             if event.type == QUIT:
                 sys.exit()
             elif event.type == KEYDOWN:
-                guy = guys[curguy]
-                move = None
-                if event.key == K_UP:
-                    move = (0, -1)
-                elif event.key == K_DOWN:
-                    move = (0, 1)
-                elif event.key == K_LEFT:
-                    move = (-1, 0)
-                elif event.key == K_RIGHT:
-                    move = (1, 0)
-                elif event.key == K_RETURN:
-                    # shoot a bullet!
-                    # this is a bad way to do it
-                    bullet = Entity('bullet')
-                    grid.add(bullet, (grid.entities[guy]))
-                    for x in xrange(guy.weapon.range):
-                        grid.move(bullet, (1, 0))
-                        update_screen(grid, ui, screen, guys, enemies)
-                        done = False
-                        for e in grid.collisions(bullet):
-                            for enemy in enemies:
-                                if e == enemy:
-                                    enemy.health -= 10
-                                    done = True
-                        if done:
-                            break
-                        pygame.time.wait(100)
-                    grid.remove(bullet)
-                if move != None:
-                    x, y = grid.entities[guy]
-                    dx, dy = move
-                    collision = False
-                    for e in grid.at((x + dx, y + dy)):
-                        # if there's something there, abort
-                        collision = True
-                    if collision: continue
-                    grid.move(guy, move)
-                curguy = (curguy + 1) % len(guys)
-                    
+                prevguy = curguy
+                curguy = handle_key(grid, ui, screen, event.key, guys, curguy)
+                if prevguy > curguy: # looped around
+                    move_enemies(grid, ui, screen, guys, enemies)
         update_screen(grid, ui, screen, guys, enemies)
