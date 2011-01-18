@@ -33,7 +33,12 @@ class Grid:
     def move(self, e, delta):
         x, y = self.entities[e]
         dx, dy = delta
-        self.entities[e] = (x + dx, y + dy)
+        x += dx
+        y += dy
+        if x >= self.cols or x < 0 or y >= self.rows or y < 0:
+            return False
+        self.entities[e] = (x, y)
+        return True
 
     def collisions(self, entity):
         '''returns everything in the grid with the same (x, y) as entity'''
